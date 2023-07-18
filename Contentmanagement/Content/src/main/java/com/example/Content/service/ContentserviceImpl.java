@@ -12,12 +12,14 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+
 @Service
-public class ContentserviceImpl implements Contentservice{
+public class ContentserviceImpl implements Contentservice {
     @Autowired
     private Contentrepository contentrepository;
     @Autowired
-private Userproxy userproxy;
+    private Userproxy userproxy;
+
     @Override
     public List<Userclass> getallcontents() {
         return contentrepository.findAll();
@@ -28,21 +30,19 @@ private Userproxy userproxy;
         return contentrepository.findById(emailid).get();
     }
 
-
-
     @Override
-    public Userclass addcontent(String emailId,ContentData contentData) {
-        Userclass user=contentrepository.findById(emailId).get();
+    public Userclass addcontent(String emailId, ContentData contentData) {
+        Userclass user = contentrepository.findById(emailId).get();
         user.getContentData().add(contentData);
         return contentrepository.save(user);
     }
 
     @Override
-    public Userclass update(String emailid,ContentData contentData) {
+    public Userclass update(String emailid, ContentData contentData) {
         Userclass user = contentrepository.findById(emailid).get();
-        List<ContentData>cData=user.getContentData();
-        for(int i=0;i<cData.size();i++) {
-            if (contentData.getCid()==(cData.get(i).getCid())) {
+        List<ContentData> cData = user.getContentData();
+        for (int i = 0; i < cData.size(); i++) {
+            if (contentData.getCid() == (cData.get(i).getCid())) {
                 cData.remove(i);
             }
         }
@@ -50,7 +50,6 @@ private Userproxy userproxy;
         user.setContentData(cData);
         return contentrepository.save(user);
     }
-
 
     @Override
     public boolean deletecontent(String emailid) {
@@ -60,26 +59,24 @@ private Userproxy userproxy;
 
     @Override
     public Userclass adduser1(Commonuser commonuser) {
-        UserDTO userDTO =new UserDTO();
+        UserDTO userDTO = new UserDTO();
         userDTO.setUserId(commonuser.getUserId());
         userDTO.setEmailId(commonuser.getEmailId());
         userDTO.setPassword(commonuser.getPassword());
         userDTO.setUserName(commonuser.getUserName());
-        ResponseEntity<?> response= userproxy.sendUserObjectUserAppJWT(userDTO);
-        Userclass user = new Userclass(commonuser.getEmailId(), commonuser.getUserName(),new ArrayList<>());
+        ResponseEntity<?> response = userproxy.sendUserObjectUserAppJWT(userDTO);
+        Userclass user = new Userclass(commonuser.getEmailId(), commonuser.getUserName(), new ArrayList<>());
         return contentrepository.insert(user);
     }
 
     @Override
     public boolean delete(String emailid, int cid) {
         Userclass user = contentrepository.findById(emailid).get();
-        List<ContentData>contentdata=user.getContentData();
-        for(int i=0;i<contentdata.size();i++){
+        List<ContentData> contentdata = user.getContentData();
+        for (int i = 0; i < contentdata.size(); i++) {
             System.out.println(i);
-            if(cid==contentdata.get(i).getCid()){
-
+            if (cid == contentdata.get(i).getCid()) {
                 contentdata.remove(i);
-//                user.setContentData(contentdata);
                 contentrepository.save(user);
             }
         }

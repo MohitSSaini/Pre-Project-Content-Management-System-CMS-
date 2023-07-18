@@ -13,28 +13,28 @@ import org.springframework.web.bind.annotation.*;
 public class Contentcon {
     @Autowired
     private Contentservice contentservice;
+
     @GetMapping("/getcontent")
     public ResponseEntity<?> getAllcontents( ){
         return new ResponseEntity<>(contentservice.getallcontents(), HttpStatus.OK);
     }
-    //http://localhost:9999/content-management/c1/addcontent
 
 
     @PostMapping("/addcontent/{emailid}")
     public ResponseEntity<?> addcontent(@PathVariable String emailid ,@RequestBody ContentData contentData){
         return  new ResponseEntity<>(contentservice.addcontent(emailid,contentData),HttpStatus.OK);
     }
-   // http://localhost:9999/content-management/c1/update
+
     @PutMapping("/update/{emailid}")
     public ResponseEntity<?> update(@PathVariable String emailid,@RequestBody  ContentData contentData) {
         return new ResponseEntity<>(contentservice.update(emailid,contentData), HttpStatus.OK);
     }
-    //http://localhost:9999/content-management/c1/delete
+
     @DeleteMapping("/delete/{emailid}")
     public ResponseEntity<?> deletecontents(@PathVariable String emailid){
         return new ResponseEntity<>(contentservice.deletecontent(emailid),HttpStatus.OK);
     }
-    //http://localhost:9999/content-management/c1/add-user1
+
     @PostMapping("add-user1")
     public ResponseEntity<?>addUser1(@RequestBody Commonuser commonuser){
         return new ResponseEntity<>(contentservice.adduser1(commonuser), HttpStatus.OK);

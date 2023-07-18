@@ -11,9 +11,9 @@ import java.io.IOException;
 public class JwtFilter  extends GenericFilter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-        HttpServletRequest request=(HttpServletRequest) servletRequest;
-        HttpServletResponse response=(HttpServletResponse) servletResponse;
-        String authHeader=request.getHeader("authorization");
+        HttpServletRequest request=(HttpServletRequest) servletRequest;//downcasting parent to child
+        HttpServletResponse response=(HttpServletResponse) servletResponse;//downcasting parent to child
+        String authHeader=request.getHeader("authorization");//
 
         if("OPTIONS".equals(request.getMethod())){
             response.setStatus(HttpServletResponse.SC_OK);
@@ -21,6 +21,7 @@ public class JwtFilter  extends GenericFilter {
         } else if (authHeader==null || !authHeader.startsWith("Bearer")) {
             throw new ServletException("Missing or invalid exception");
         }
+
         String token=authHeader.substring(7);
         Claims claims= Jwts.parser().setSigningKey("mysecurekey").parseClaimsJws(token).getBody();
         System.out.println("claims in filter:"+claims);
